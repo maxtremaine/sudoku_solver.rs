@@ -45,6 +45,17 @@ fn get_related_cells(cell: (u8, u8)) -> Vec<(u8, u8)> {
         });
 }
 
+fn get_cell_values(indexes: Vec<(u8, u8)>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
+    return indexes.iter()
+        .fold(Vec::new(), |mut acc, index| {
+            let value = puzzle[usize::from(index.0)][usize::from(index.1)];
+            if value != 0 && !acc.contains(&value) {
+                acc.push(value)
+            }
+            acc
+        })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -59,5 +70,22 @@ mod tests {
             (8, 0), (8, 1) ];
         assert_eq!(test_group00, get_related_cells((0, 0)));
         assert_eq!(test_group72, get_related_cells((7, 2)));
+    }
+
+    #[test]
+    fn gets_cell_values() {
+        let test_puzzle = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        let test_indexes = vec![ ( 0, 0), (0, 1), (0, 6), (6, 1), (7, 1) ];
+        assert_eq!(vec![ 1, 2, 5, 7 ], get_cell_values(test_indexes, test_puzzle))
     }
 }
