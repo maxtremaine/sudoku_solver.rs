@@ -49,11 +49,27 @@ fn get_cell_values(indexes: Vec<(u8, u8)>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
     indexes.iter()
         .fold(Vec::new(), |mut acc, index| {
             let value = puzzle[usize::from(index.0)][usize::from(index.1)];
-            if value != 0 && !acc.contains(&value) {
+            if value != 0 {
                 acc.push(value)
             }
             acc
         })
+}
+
+fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
+    for group in GROUPS.iter() {
+        let values = get_cell_values(Vec::from(*group), puzzle);
+        for value in values.iter() {
+            let count = values.iter()
+                .filter(|other_value| *other_value == value)
+                .count();
+            if count > 1 {
+                return false
+            }
+        }
+    }
+
+    true
 }
 
 #[cfg(test)]
@@ -89,5 +105,33 @@ mod tests {
         let test_indexes1 = vec![ ( 4, 2), (4, 3), (5, 6), (7, 7)];
         assert_eq!(vec![ 1, 2, 5, 7 ], get_cell_values(test_indexes0, test_puzzle));
         assert_eq!(vec![ 8, 4 ], get_cell_values(test_indexes1, test_puzzle));
+    }
+
+    #[test]
+    fn validates_puzzle() {
+        let valid_puzzle = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        let invalid_puzzle = [
+            [ 0, 1, 1, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        assert_eq!(true, is_valid_puzzle(valid_puzzle));
+        assert_eq!(false, is_valid_puzzle(invalid_puzzle));
     }
 }
