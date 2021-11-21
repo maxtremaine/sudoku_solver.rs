@@ -1,3 +1,5 @@
+// use crate::pure_functions; This is how to import pure functions, for next steps.
+
 const GROUPS: [[(u8, u8); 9]; 27] = [
     // Rows
     [ (0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8) ],
