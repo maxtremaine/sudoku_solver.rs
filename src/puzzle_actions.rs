@@ -32,7 +32,7 @@ fn get_related_cells(cell: (u8, u8)) -> Vec<(u8, u8)> {
         [ (6, 6), (6, 7), (6, 8), (7, 6), (7, 7), (7, 8), (8, 6), (8, 7), (8, 8) ]
     ];
 
-    return groups.iter()
+    groups.iter()
         .filter(|coords| coords.contains(&cell))
         .fold(Vec::new(), |mut acc, group| {
             group.iter()
@@ -42,11 +42,11 @@ fn get_related_cells(cell: (u8, u8)) -> Vec<(u8, u8)> {
                     }
                 });
             acc
-        });
+        })
 }
 
 fn get_cell_values(indexes: Vec<(u8, u8)>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
-    return indexes.iter()
+    indexes.iter()
         .fold(Vec::new(), |mut acc, index| {
             let value = puzzle[usize::from(index.0)][usize::from(index.1)];
             if value != 0 && !acc.contains(&value) {
@@ -80,12 +80,14 @@ mod tests {
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
             [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
-            [ 0, 7, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        let test_indexes = vec![ ( 0, 0), (0, 1), (0, 6), (6, 1), (7, 1) ];
-        assert_eq!(vec![ 1, 2, 5, 7 ], get_cell_values(test_indexes, test_puzzle))
+        let test_indexes0 = vec![ ( 0, 0), (0, 1), (0, 6), (6, 1), (7, 1) ];
+        let test_indexes1 = vec![ ( 4, 2), (4, 3), (5, 6), (7, 7)];
+        assert_eq!(vec![ 1, 2, 5, 7 ], get_cell_values(test_indexes0, test_puzzle));
+        assert_eq!(vec![ 8, 4 ], get_cell_values(test_indexes1, test_puzzle));
     }
 }
