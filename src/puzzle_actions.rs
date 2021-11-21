@@ -32,7 +32,7 @@ fn get_related_cells(cell: (u8, u8)) -> Vec<(u8, u8)> {
         [ (6, 6), (6, 7), (6, 8), (7, 6), (7, 7), (7, 8), (8, 6), (8, 7), (8, 8) ]
     ];
 
-    let related_cells: Vec<(u8, u8)> = groups.iter()
+    return groups.iter()
         .filter(|coords| coords.contains(&cell))
         .fold(Vec::new(), |mut acc, group| {
             group.iter()
@@ -43,8 +43,6 @@ fn get_related_cells(cell: (u8, u8)) -> Vec<(u8, u8)> {
                 });
             acc
         });
-    
-    related_cells
 }
 
 #[cfg(test)]
