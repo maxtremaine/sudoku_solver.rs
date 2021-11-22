@@ -1,22 +1,31 @@
-//use crate::pure_functions;
+use crate::pure_functions;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub struct Coords {
     row: u8,
     col: u8
-}
-
-impl PartialEq for Coords {
-    fn eq(&self, other: &Self) -> bool {
-        self.row == other.row && self.col == other.col
-    }
 }
 
 fn c(row: u8, col: u8) -> Coords {
     Coords { row, col }
 }
 
+#[derive(PartialEq, Debug)]
+pub struct Cell {
+    coords: Coords,
+    value: u8,
+    possible_values: Vec<u8>
+}
 
+impl Cell {
+    pub fn new(coords: Coords, puzzle: [[u8; 9]; 9]) -> Self {
+        Self {
+            coords,
+            value: puzzle[usize::from(coords.row)][usize::from(coords.col)],
+            possible_values: pure_functions::get_missing_digits(get_cell_values(&get_related_cells(coords), puzzle))
+        }
+    }
+}
 
 fn get_group_coords() -> Vec<Vec<Coords>> {
     let groups: [[(u8, u8); 9]; 27] = [
@@ -115,11 +124,33 @@ mod tests {
     use super::*;
 
     #[test]
-    fn creates_cells() {
+    fn creates_coordinates() {
         let constructor_instance = Coords { row: 4, col: 8 };
         let method_instance = c(4, 8);
         assert_eq!(constructor_instance.row, method_instance.row);
         assert_eq!(constructor_instance.col, method_instance.col);
+    }
+
+    #[test]
+    fn creates_cells() {
+        let test_coords = Coords { row: 0, col: 0};
+        let test_puzzle = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        let output_cell = Cell {
+            coords: test_coords,
+            value: 0,
+            possible_values: vec![ 3, 4, 5, 6, 7, 8, 9 ]
+        };
+        assert_eq!(output_cell, Cell::new(test_coords, test_puzzle));
     }
 
     #[test]
