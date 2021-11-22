@@ -1,5 +1,6 @@
 mod pure_functions;
 mod puzzle_actions;
+mod puzzle_types;
 
 fn main() {
     let _start_puzzle: [[u8; 9]; 9] = [
