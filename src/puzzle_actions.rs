@@ -88,6 +88,9 @@ fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
     for group in get_group_coords().iter() {
         let values = get_cell_values(group, puzzle);
         for value in values.iter() {
+            if value > &9 {
+                return false
+            }
             let count = values.iter()
                 .filter(|other_value| other_value == &value)
                 .count();
@@ -156,7 +159,7 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        let invalid_puzzle = [
+        let invalid_puzzle0 = [
             [ 0, 1, 1, 0, 0, 0, 2, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
@@ -167,7 +170,19 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
+        let invalid_puzzle1 = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 10, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
         assert_eq!(true, is_valid_puzzle(valid_puzzle));
-        assert_eq!(false, is_valid_puzzle(invalid_puzzle));
+        assert_eq!(false, is_valid_puzzle(invalid_puzzle0));
+        assert_eq!(false, is_valid_puzzle(invalid_puzzle1));
     }
 }
