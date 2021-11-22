@@ -29,10 +29,10 @@ fn main() {
         });
 
     (1..max_run_index)
-        .fold(start_puzzle, |working_branches, run_count| -> [[u8; 9]; 9] {
-            
+        .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
+
             println!("{}", run_count);
-            [
+            vec![[
                 [ 4, 1, 0, 0, 0, 0, 0, 0, 0 ],
                 [ 0, 0, 3, 0, 0, 0, 0, 2, 9 ],
                 [ 0, 0, 0, 0, 0, 4, 0, 6, 0 ],
@@ -42,6 +42,6 @@ fn main() {
                 [ 6, 7, 0, 0, 0, 1, 0, 0, 0 ],
                 [ 0, 0, 9, 0, 2, 0, 0, 0, 3 ],
                 [ 0, 3, 0, 0, 0, 9, 0, 5, 0 ]
-            ]
+            ]]
         });
 }

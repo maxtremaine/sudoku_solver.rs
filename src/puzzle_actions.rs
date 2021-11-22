@@ -1,22 +1,24 @@
 //use crate::pure_functions;
 
 #[derive(Debug, Copy, Clone)]
-pub struct Cell {
+pub struct Coords {
     row: u8,
     col: u8
 }
 
-impl PartialEq for Cell {
+impl PartialEq for Coords {
     fn eq(&self, other: &Self) -> bool {
         self.row == other.row && self.col == other.col
     }
 }
 
-fn c(row: u8, col: u8) -> Cell {
-    Cell { row, col }
+fn c(row: u8, col: u8) -> Coords {
+    Coords { row, col }
 }
 
-fn get_group_coords() -> Vec<Vec<Cell>> {
+
+
+fn get_group_coords() -> Vec<Vec<Coords>> {
     let groups: [[(u8, u8); 9]; 27] = [
         // Rows
         [ (0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8) ],
@@ -51,7 +53,7 @@ fn get_group_coords() -> Vec<Vec<Cell>> {
     ];
 
     groups.iter()
-        .map(|group| -> Vec<Cell> {
+        .map(|group| -> Vec<Coords> {
             group.iter()
                 .map(|coord| c(coord.0, coord.1))
                 .collect()
@@ -59,9 +61,9 @@ fn get_group_coords() -> Vec<Vec<Cell>> {
         .collect()
 }
 
-fn get_related_cells(cell: Cell) -> Vec<Cell> {
+fn get_related_cells(index: Coords) -> Vec<Coords> {
     get_group_coords().iter()
-        .filter(|coords| coords.contains(&cell))
+        .filter(|coords| coords.contains(&index))
         .fold(Vec::new(), |mut acc, group| {
             group.iter()
                 .for_each(|value| {
@@ -73,7 +75,7 @@ fn get_related_cells(cell: Cell) -> Vec<Cell> {
         })
 }
 
-fn get_cell_values(indexes: &Vec<Cell>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
+fn get_cell_values(indexes: &Vec<Coords>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
     indexes.iter()
         .fold(Vec::new(), |mut acc, index| {
             let value = puzzle[usize::from(index.row)][usize::from(index.col)];
@@ -103,8 +105,8 @@ pub fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
     true
 }
 
-pub fn change_cell(cell: Cell, value: u8, mut puzzle: [[u8; 9]; 9]) -> [[u8; 9]; 9] {
-    puzzle[usize::from(cell.row)][usize::from(cell.col)] = value;
+pub fn change_cell(index: Coords, value: u8, mut puzzle: [[u8; 9]; 9]) -> [[u8; 9]; 9] {
+    puzzle[usize::from(index.row)][usize::from(index.col)] = value;
     puzzle
 }
 
@@ -114,7 +116,7 @@ mod tests {
 
     #[test]
     fn creates_cells() {
-        let constructor_instance = Cell { row: 4, col: 8 };
+        let constructor_instance = Coords { row: 4, col: 8 };
         let method_instance = c(4, 8);
         assert_eq!(constructor_instance.row, method_instance.row);
         assert_eq!(constructor_instance.col, method_instance.col);
