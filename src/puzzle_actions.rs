@@ -1,7 +1,7 @@
 //use crate::pure_functions;
 
 #[derive(Debug, Copy, Clone)]
-struct Cell {
+pub struct Cell {
     row: u8,
     col: u8
 }
@@ -84,7 +84,7 @@ fn get_cell_values(indexes: &Vec<Cell>, puzzle: [[u8; 9]; 9]) -> Vec<u8> {
         })
 }
 
-fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
+pub fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
     for group in get_group_coords().iter() {
         let values = get_cell_values(group, puzzle);
         for value in values.iter() {
@@ -101,6 +101,11 @@ fn is_valid_puzzle(puzzle: [[u8; 9]; 9]) -> bool {
     }
 
     true
+}
+
+pub fn change_cell(cell: Cell, value: u8, mut puzzle: [[u8; 9]; 9]) -> [[u8; 9]; 9] {
+    puzzle[usize::from(cell.row)][usize::from(cell.col)] = value;
+    puzzle
 }
 
 #[cfg(test)]
@@ -184,5 +189,32 @@ mod tests {
         assert_eq!(true, is_valid_puzzle(valid_puzzle));
         assert_eq!(false, is_valid_puzzle(invalid_puzzle0));
         assert_eq!(false, is_valid_puzzle(invalid_puzzle1));
+    }
+
+    #[test]
+    fn changes_values() {
+        let input_puzzle = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        let output_puzzle = [
+            [ 4, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        assert_eq!(output_puzzle, change_cell(c(0, 0), 4, input_puzzle));
     }
 }
