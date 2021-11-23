@@ -30,7 +30,7 @@ fn main() {
 
     let output = (1..max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
-            working_branches.iter().fold(Vec::new(), |_, old_branch| -> Vec<[[u8; 9]; 9]> {
+            let new_working_branches = working_branches.iter().fold(Vec::new(), |mut valid_new_branches, old_branch| -> Vec<[[u8; 9]; 9]> {
                 let mut blank_cells: Vec<puzzle_actions::Cell> = old_branch.iter().enumerate()
                     .fold(Vec::new(), |mut new_cells, (y, row)| -> Vec<puzzle_actions::Cell> {
                         row.iter().enumerate().for_each(|(x, cell_value)| {
@@ -43,17 +43,16 @@ fn main() {
                 
                 blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
                 
-                let new_branches = blank_cells[0].possible_values.iter().map(|value| {
-                    // println!("{:?}", blank_cells[0].coords);
-                    // println!("{:?}", value);
-                    let new_puzzle = puzzle_actions::change_cell(blank_cells[0].coords, *value, *old_branch);
-                    // println!("{:?}", new_puzzle);
-                    new_puzzle
+                let new_branches: Vec<[[u8; 9];9]> = blank_cells[0].possible_values.iter().map(|value| {
+                    puzzle_actions::change_cell(blank_cells[0].coords, *value, *old_branch)
                 }).collect();
 
-                println!("{:?}", new_branches);
-                new_branches
-            })
+                new_branches.iter().for_each(|branch| valid_new_branches.push(*branch));
+                valid_new_branches
+            });
+
+            println!("Completed branch: {}", run_count);
+            new_working_branches
         });
     
     println!("{:?}", output)
