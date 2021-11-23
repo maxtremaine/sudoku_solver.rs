@@ -18,7 +18,7 @@ fn main() {
         panic!("The start puzzle is not valid.")
     }
     
-    let max_run_index = start_puzzle.iter()
+    let max_run_index: u8 = start_puzzle.iter()
         .fold(1, |mut acc, row| {
             for value in row {
                 if value == &0 {
@@ -31,6 +31,7 @@ fn main() {
     (1..max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
             
+
             println!("{}", run_count);
             vec![[
                 [ 4, 1, 0, 0, 0, 0, 0, 0, 0 ],

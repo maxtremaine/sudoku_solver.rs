@@ -6,7 +6,7 @@ pub struct Coords {
     col: u8
 }
 
-fn c(row: u8, col: u8) -> Coords {
+fn cell(row: u8, col: u8) -> Coords {
     Coords { row, col }
 }
 
@@ -64,7 +64,7 @@ fn get_group_coords() -> Vec<Vec<Coords>> {
     groups.iter()
         .map(|group| -> Vec<Coords> {
             group.iter()
-                .map(|coord| c(coord.0, coord.1))
+                .map(|coord| cell(coord.0, coord.1))
                 .collect()
         })
         .collect()
@@ -126,7 +126,7 @@ mod tests {
     #[test]
     fn creates_coordinates() {
         let constructor_instance = Coords { row: 4, col: 8 };
-        let method_instance = c(4, 8);
+        let method_instance = cell(4, 8);
         assert_eq!(constructor_instance.row, method_instance.row);
         assert_eq!(constructor_instance.col, method_instance.col);
     }
@@ -155,14 +155,14 @@ mod tests {
 
     #[test]
     fn gets_related_cells() {
-        let test_group00 = vec![ c(0, 0), c(0, 1), c(0, 2), c(0, 3), c(0, 4), c(0, 5), c(0, 6),
-            c(0, 7), c(0, 8), c(1, 0), c(2, 0), c(3, 0), c(4, 0), c(5, 0), c(6, 0), c(7, 0),
-            c(8, 0), c(1, 1), c(1, 2), c(2, 1), c(2, 2) ];
-        let test_group72 = vec![ c(7, 0), c(7, 1), c(7, 2), c(7, 3), c(7, 4), c(7, 5), c(7, 6),
-            c(7, 7), c(7, 8), c(0, 2), c(1, 2), c(2, 2), c(3, 2), c(4, 2), c(5, 2), c(6, 2),
-            c(8, 2), c(6, 0), c(6, 1), c(8, 0), c(8, 1) ];
-        assert_eq!(test_group00, get_related_cells(c(0, 0)));
-        assert_eq!(test_group72, get_related_cells(c(7, 2)));
+        let test_group00 = vec![ cell(0, 0), cell(0, 1), cell(0, 2), cell(0, 3), cell(0, 4), cell(0, 5), cell(0, 6),
+            cell(0, 7), cell(0, 8), cell(1, 0), cell(2, 0), cell(3, 0), cell(4, 0), cell(5, 0), cell(6, 0), cell(7, 0),
+            cell(8, 0), cell(1, 1), cell(1, 2), cell(2, 1), cell(2, 2) ];
+        let test_group72 = vec![ cell(7, 0), cell(7, 1), cell(7, 2), cell(7, 3), cell(7, 4), cell(7, 5), cell(7, 6),
+            cell(7, 7), cell(7, 8), cell(0, 2), cell(1, 2), cell(2, 2), cell(3, 2), cell(4, 2), cell(5, 2), cell(6, 2),
+            cell(8, 2), cell(6, 0), cell(6, 1), cell(8, 0), cell(8, 1) ];
+        assert_eq!(test_group00, get_related_cells(cell(0, 0)));
+        assert_eq!(test_group72, get_related_cells(cell(7, 2)));
     }
 
     #[test]
@@ -178,8 +178,8 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        let test_indexes0 = vec![ c( 0, 0), c(0, 1), c(0, 6), c(6, 1), c(7, 1) ];
-        let test_indexes1 = vec![ c( 4, 2), c(4, 3), c(5, 6), c(7, 7)];
+        let test_indexes0 = vec![ cell( 0, 0), cell(0, 1), cell(0, 6), cell(6, 1), cell(7, 1) ];
+        let test_indexes1 = vec![ cell( 4, 2), cell(4, 3), cell(5, 6), cell(7, 7)];
         assert_eq!(vec![ 1, 2, 5, 7 ], get_cell_values(&test_indexes0, test_puzzle));
         assert_eq!(vec![ 8, 4 ], get_cell_values(&test_indexes1, test_puzzle));
     }
@@ -248,6 +248,6 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        assert_eq!(output_puzzle, change_cell(c(0, 0), 4, input_puzzle));
+        assert_eq!(output_puzzle, change_cell(cell(0, 0), 4, input_puzzle));
     }
 }
