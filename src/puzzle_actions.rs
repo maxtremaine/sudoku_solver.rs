@@ -6,15 +6,15 @@ pub struct Coords {
     col: u8
 }
 
-fn cell(row: u8, col: u8) -> Coords {
+pub fn cell(row: u8, col: u8) -> Coords {
     Coords { row, col }
 }
 
 #[derive(PartialEq, Debug)]
 pub struct Cell {
-    coords: Coords,
-    value: u8,
-    possible_values: Vec<u8>
+    pub coords: Coords,
+    pub value: u8,
+    pub possible_values: Vec<u8>
 }
 
 impl Cell {

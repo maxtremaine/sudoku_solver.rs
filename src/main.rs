@@ -28,21 +28,29 @@ fn main() {
             acc
         });
 
-    (1..max_run_index)
+    let output = (1..max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
-            
-
-            println!("{}", run_count);
-            vec![[
-                [ 4, 1, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 3, 0, 0, 0, 0, 2, 9 ],
-                [ 0, 0, 0, 0, 0, 4, 0, 6, 0 ],
-                [ 0, 0, 0, 7, 0, 0, 0, 9, 0 ],
-                [ 0, 0, 7, 4, 0, 0, 0, 0, 2 ],
-                [ 0, 0, 0, 0, 0, 8, 0, 0, 5 ],
-                [ 6, 7, 0, 0, 0, 1, 0, 0, 0 ],
-                [ 0, 0, 9, 0, 2, 0, 0, 0, 3 ],
-                [ 0, 3, 0, 0, 0, 9, 0, 5, 0 ]
-            ]]
+            working_branches.iter().fold(Vec::new(), |_, old_branch| -> Vec<[[u8; 9]; 9]> {
+                let mut blank_cells: Vec<puzzle_actions::Cell> = old_branch.iter().enumerate()
+                    .fold(Vec::new(), |mut new_cells, (y, row)| -> Vec<puzzle_actions::Cell> {
+                        row.iter().enumerate().for_each(|(x, cell_value)| {
+                            if cell_value == &0 {
+                                new_cells.push(puzzle_actions::Cell::new(puzzle_actions::cell(y.try_into().unwrap(), x.try_into().unwrap()), *old_branch))
+                            }
+                        });
+                        new_cells
+                    });
+                
+                blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
+                
+                blank_cells[0].possible_values.iter().map(|value| {
+                    println!("{:?}", blank_cells[0].coords);
+                    let new_puzzle = puzzle_actions::change_cell(blank_cells[0].coords, *value, *old_branch);
+                    println!("{:?}", new_puzzle);
+                    new_puzzle
+                }).collect()
+            })
         });
+    
+    println!("{:?}", output)
 }
