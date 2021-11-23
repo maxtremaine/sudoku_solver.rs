@@ -43,12 +43,16 @@ fn main() {
                 
                 blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
                 
-                blank_cells[0].possible_values.iter().map(|value| {
-                    println!("{:?}", blank_cells[0].coords);
+                let new_branches = blank_cells[0].possible_values.iter().map(|value| {
+                    // println!("{:?}", blank_cells[0].coords);
+                    // println!("{:?}", value);
                     let new_puzzle = puzzle_actions::change_cell(blank_cells[0].coords, *value, *old_branch);
-                    println!("{:?}", new_puzzle);
+                    // println!("{:?}", new_puzzle);
                     new_puzzle
-                }).collect()
+                }).collect();
+
+                println!("{:?}", new_branches);
+                new_branches
             })
         });
     
