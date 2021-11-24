@@ -168,7 +168,7 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        let invalid_puzzle0 = [
+        let invalid_puzzle_duplicates = [
             [ 0, 1, 1, 0, 0, 0, 2, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
@@ -179,7 +179,7 @@ mod tests {
             [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
-        let invalid_puzzle1 = [
+        let invalid_puzzle_greater_than_nine = [
             [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
@@ -191,13 +191,24 @@ mod tests {
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
         assert_eq!(true, is_valid_puzzle(valid_puzzle));
-        assert_eq!(false, is_valid_puzzle(invalid_puzzle0));
-        assert_eq!(false, is_valid_puzzle(invalid_puzzle1));
+        assert_eq!(false, is_valid_puzzle(invalid_puzzle_duplicates));
+        assert_eq!(false, is_valid_puzzle(invalid_puzzle_greater_than_nine));
     }
 
     #[test]
     fn changes_values() {
         let input_puzzle = [
+            [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 8, 0, 0 ],
+            [ 0, 5, 0, 0, 0, 0, 0, 0, 0 ],
+            [ 0, 7, 0, 0, 0, 0, 0, 4, 0 ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        ];
+        let unchanged_input_puzzle = [
             [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
@@ -220,5 +231,6 @@ mod tests {
             [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
         ];
         assert_eq!(output_puzzle, change_cell((0, 0), 4, input_puzzle));
+        assert_eq!(input_puzzle, unchanged_input_puzzle);
     }
 }
