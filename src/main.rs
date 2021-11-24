@@ -36,7 +36,7 @@ fn main() {
                         .fold(Vec::new(), |mut new_cells, (y, row)| -> Vec<puzzle_actions::Cell> {
                             row.iter().enumerate().for_each(|(x, cell_value)| {
                                 if cell_value == &0 {
-                                    new_cells.push(puzzle_actions::Cell::new(puzzle_actions::cell(y.try_into().unwrap(), x.try_into().unwrap()), *old_branch))
+                                    new_cells.push(puzzle_actions::Cell::new((y.try_into().unwrap(), x.try_into().unwrap()), *old_branch))
                                 }
                             });
                             new_cells
