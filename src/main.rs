@@ -2,22 +2,26 @@ mod pure_functions;
 mod puzzle_actions;
 
 fn main() {
+    
+    // Put your start puzzle here.
     let start_puzzle: [[u8; 9]; 9] = [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 3, 0, 1, 0, 6, 2, 0, 7 ],
-        [ 6, 0, 0, 0, 3, 0, 5, 1, 0 ],
-        [ 3, 2, 0, 0, 0, 9, 0, 0, 0 ],
-        [ 0, 0, 8, 0, 0, 5, 7, 0, 0 ],
-        [ 0, 0, 0, 8, 0, 0, 0, 5, 3 ],
-        [ 0, 4, 7, 0, 9, 0, 0, 0, 8 ],
-        [ 8, 0, 1, 7, 0, 2, 0, 9, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+//col:    a  b  c  d  e  f  g  h  i      row:
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], // 1
+        [ 0, 3, 0, 1, 0, 6, 2, 0, 7 ], // 2
+        [ 6, 0, 0, 0, 3, 0, 5, 1, 0 ], // 3
+        [ 3, 2, 0, 0, 0, 9, 0, 0, 0 ], // 4
+        [ 0, 0, 8, 0, 0, 5, 7, 0, 0 ], // 5
+        [ 0, 0, 0, 8, 0, 0, 0, 5, 3 ], // 6
+        [ 0, 4, 7, 0, 9, 0, 0, 0, 8 ], // 7
+        [ 8, 0, 1, 7, 0, 2, 0, 9, 0 ], // 8
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]  // 9
     ];
 
     if !puzzle_actions::is_valid_puzzle(start_puzzle) {
         panic!("The start puzzle is not valid.")
     }
     
+    // Count the number of blank cells.
     let max_run_index: u8 = start_puzzle.iter()
         .fold(1, |mut acc, row| {
             for value in row {
@@ -28,9 +32,12 @@ fn main() {
             acc
         });
 
+    // Iterate over the blank cell count.
     let output = (1..max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
             let new_working_branches: Vec<[[u8; 9]; 9]> = working_branches.iter()
+
+                // Add new branches based on degrees of freedom, narrowing as branches collapse.
                 .fold(Vec::new(), |mut valid_new_branches, old_branch| -> Vec<[[u8; 9]; 9]> {
                     let mut blank_cells: Vec<puzzle_actions::Cell> = old_branch.iter().enumerate()
                         .fold(Vec::new(), |mut new_cells, (y, row)| -> Vec<puzzle_actions::Cell> {
@@ -50,6 +57,7 @@ fn main() {
                         }).collect();
 
                     new_branches.iter().for_each(|branch| valid_new_branches.push(*branch));
+                    
                     valid_new_branches
                 });
 
