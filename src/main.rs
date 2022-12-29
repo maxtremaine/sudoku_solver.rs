@@ -57,11 +57,11 @@ fn main() {
                         }).collect();
 
                     new_branches.iter().for_each(|branch| valid_new_branches.push(*branch));
-                    
+
                     valid_new_branches
                 });
 
-            println!("Completed branch: {}", run_count);
+            println!("Completed run {} of {}.", run_count, max_run_index);
             new_working_branches
         });
     
