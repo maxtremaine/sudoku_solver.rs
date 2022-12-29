@@ -36,3 +36,5 @@ Alright, now you're ready to run.
 ```sh
 cargo run
 ```
+
+The completed puzzle will be printed to the terminal after all of the cells are filled.
