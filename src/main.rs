@@ -28,7 +28,7 @@ fn main() {
     
     // Count the number of blank cells.
     let max_run_index: u8 = start_puzzle.iter()
-        .fold(1, |mut acc, row| {
+        .fold(0, |mut acc, row| {
             for value in row {
                 if value == &0 {
                     acc += 1
@@ -38,7 +38,7 @@ fn main() {
         });
 
     // Iterate over the blank cell count.
-    let output = (1..max_run_index)
+    let output = (1..=max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<[[u8; 9]; 9]> {
             let new_working_branches: Vec<[[u8; 9]; 9]> = working_branches.iter()
 
