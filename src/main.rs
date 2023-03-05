@@ -65,7 +65,7 @@ fn main() {
                     valid_new_branches
                 });
 
-            println!("Completed run {} of {}.", run_count, max_run_index);
+            println!("Completed run {} of {} with {} branches.", run_count, max_run_index, new_working_branches.len());
             new_working_branches
         });
     
