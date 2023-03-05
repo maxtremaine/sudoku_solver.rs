@@ -1,10 +1,11 @@
 mod pure_functions;
 mod puzzle_actions;
 
-fn main() {
+use std::time::Instant;
 
-    use std::time::Instant;
-    let now = Instant::now();
+fn main() {
+    // Start the clock.
+    let t0 = Instant::now();
     
     // Put your start puzzle here.
     let start_puzzle: [[u8; 9]; 9] = [
@@ -70,6 +71,6 @@ fn main() {
     
     output[0].iter().for_each(|row| println!("{:?}", row));
 
-    let elapsed = now.elapsed();
+    let elapsed = t0.elapsed();
     println!("Elapsed: {:.2?}", elapsed);
 }
