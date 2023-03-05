@@ -70,8 +70,9 @@ fn main() {
             new_working_branches
         });
     
+    println!("\nFinished Puzzle\n===============");
     output[0].iter().for_each(|row| println!("{:?}", row));
 
     let elapsed = t0.elapsed();
-    println!("Elapsed: {:.2?}", elapsed);
+    println!("\nElapsed: {:.2?}", elapsed);
 }
