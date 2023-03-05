@@ -59,6 +59,7 @@ fn main() {
                     // Sort by degrees of freedom, ascending.
                     blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
                     
+                    // Create new branches by iterating through degrees of freedom for the lowest blank cell.
                     let new_branches: Vec<[[u8; 9];9]> = blank_cells[0].possible_values.iter()
                         .map(|value| {
                             puzzle_actions::change_cell(blank_cells[0].coords, *value, *old_branch)
