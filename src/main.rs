@@ -44,6 +44,8 @@ fn main() {
 
                 // Add new branches based on degrees of freedom, narrowing as branches collapse.
                 .fold(Vec::new(), |mut valid_new_branches, old_branch| -> Vec<[[u8; 9]; 9]> {
+
+                    // Create Cell objects for each blank cell (0 value).
                     let mut blank_cells: Vec<puzzle_actions::Cell> = old_branch.iter().enumerate()
                         .fold(Vec::new(), |mut new_cells, (y, row)| -> Vec<puzzle_actions::Cell> {
                             row.iter().enumerate().for_each(|(x, cell_value)| {
