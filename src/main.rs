@@ -9,7 +9,7 @@ fn main() {
     
     // Put your start puzzle here.
     let start_puzzle: [[u8; 9]; 9] = [
-//col:    a  b  c  d  e  f  g  h  i      row:
+    //col:a  b  c  d  e  f  g  h  i      row:
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], // 1
         [ 0, 3, 0, 1, 0, 6, 2, 0, 7 ], // 2
         [ 6, 0, 0, 0, 3, 0, 5, 1, 0 ], // 3
