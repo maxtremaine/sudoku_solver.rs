@@ -54,6 +54,7 @@ fn main() {
                             new_cells
                         });
                     
+                    // Sort by degrees of freedom, ascending.
                     blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
                     
                     let new_branches: Vec<[[u8; 9];9]> = blank_cells[0].possible_values.iter()
