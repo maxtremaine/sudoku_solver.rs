@@ -21,6 +21,7 @@ fn main() {
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]  // 9
     ];
 
+    // Stop if the input is not valid.
     if !puzzle_actions::is_valid_puzzle(start_puzzle) {
         panic!("The start puzzle is not valid.")
     }
