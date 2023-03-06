@@ -1,5 +1,6 @@
 mod pure_functions;
 mod puzzle_actions;
+mod sudoku;
 
 use std::time::Instant;
 
