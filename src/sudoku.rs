@@ -1,5 +1,6 @@
 // Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
 type Sudoku = [u8; 81];
+// - [ ] Switch this to a struct so 'trait' doesn't have to be used.
 
 // Groups are sets of cells that must incorporate ints from 1 to 9.
 const GROUPS: [[u8; 9]; 27] = [
