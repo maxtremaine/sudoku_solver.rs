@@ -1,5 +1,7 @@
 // Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
-struct Sudoku([u8; 81]);
+struct Sudoku {
+	numbers: [u8; 81]
+}
 // - [x] Switch this to a struct so 'trait' doesn't have to be used.
 
 // Groups are sets of cells that must incorporate ints from 1 to 9.
@@ -40,7 +42,7 @@ impl Sudoku {
 	fn get_group_values(&self, group: &[u8; 9]) -> [u8; 9] {
 		group.iter().enumerate()
 			.fold([0; 9], |mut acc, (i, group_index)| {
-				acc[i] = self.0[usize::from(*group_index)];
+				acc[i] = self.numbers[usize::from(*group_index)];
 				acc
 			})
 	}
@@ -86,7 +88,7 @@ mod tests {
 	#[test]
 	fn gets_group_values() {
 		let group_to_check = GROUPS[0];
-		let test_sudoku = Sudoku(TEST_PUZZLE);
+		let test_sudoku = Sudoku{numbers: TEST_PUZZLE};
 		let correct_answer: [u8; 9] = [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ];
 		assert_eq!(test_sudoku.get_group_values(&group_to_check), correct_answer)
 	}
@@ -115,8 +117,8 @@ mod tests {
             0, 7, 0, 0, 0, 0, 0, 4, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0
         ];
-		assert_eq!(true, Sudoku(TEST_PUZZLE).is_valid());
-        assert_eq!(false, Sudoku(invalid_puzzle_duplicates).is_valid());
-        assert_eq!(false, Sudoku(invalid_puzzle_greater_than_nine).is_valid());
+		assert_eq!(true, Sudoku{numbers: TEST_PUZZLE}.is_valid());
+        assert_eq!(false, Sudoku{numbers: invalid_puzzle_duplicates}.is_valid());
+        assert_eq!(false, Sudoku{numbers: invalid_puzzle_greater_than_nine}.is_valid());
 	}
 }
