@@ -33,6 +33,7 @@ const GROUPS: [[u8; 9]; 27] = [
 ];
 
 // Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
+#[derive(PartialEq, Debug)]
 struct Sudoku {
 	numbers: [u8; 81]
 }
@@ -66,6 +67,12 @@ impl Sudoku {
 					});
 				acc
 			})
+	}
+
+	fn change_cell(&self, index: u8, value:u8) -> Sudoku {
+		let mut new_values = self.numbers;
+		new_values[usize::from(index)] = value;
+		Sudoku{numbers: new_values}
 	}
 
 	fn is_valid(&self) -> bool {
@@ -106,20 +113,48 @@ mod tests {
 		0, 0, 0, 0, 0, 0, 0, 0, 0
 	];
 
-	const test_sudoku: Sudoku = Sudoku{numbers: TEST_PUZZLE};
+	const TEST_SUDOKU: Sudoku = Sudoku{numbers: TEST_PUZZLE};
 
 	#[test]
 	fn gets_group_values() {
 		let group_to_check = GROUPS[0];
-		
 		let correct_answer: [u8; 9] = [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ];
-		assert_eq!(test_sudoku.get_group_values(&group_to_check), correct_answer)
+		assert_eq!(TEST_SUDOKU.get_group_values(&group_to_check), correct_answer)
 	}
 
 	#[test]
 	fn gets_related_cell_values() {
 		let related_to_0 = vec![1, 2];
-		assert_eq!(related_to_0, test_sudoku.get_related_cell_values(0))
+		assert_eq!(related_to_0, TEST_SUDOKU.get_related_cell_values(0))
+	}
+
+	#[test]
+	fn changes_cell_values() {
+		let unchanged_puzzle: [u8; 81] = [
+			0, 1, 0, 0, 0, 0, 2, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 8, 0, 0,
+			0, 5, 0, 0, 0, 0, 0, 0, 0,
+			0, 7, 0, 0, 0, 0, 0, 4, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0
+		];
+		let changed_puzzle: [u8; 81] = [
+			0, 1, 0, 5, 0, 0, 2, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 8, 0, 0,
+			0, 5, 0, 0, 0, 0, 0, 0, 0,
+			0, 7, 0, 0, 0, 0, 0, 4, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0
+		];
+		let new_puzzle = TEST_SUDOKU.change_cell(3, 5);
+		assert_eq!(Sudoku{numbers: changed_puzzle}, new_puzzle);
+		assert_eq!(Sudoku{numbers: unchanged_puzzle}, TEST_SUDOKU);
 	}
 
 	#[test]
