@@ -47,6 +47,7 @@ impl Sudoku {
 			})
 	}
 
+	// Using a simple /81 index, what cells have to include 1-9 to satisfy the rules of Sudoku?
 	fn get_related_cell_values(&self, index: u8) -> Vec<u8> {
 		// Get the groups associated with "index"
 		let related_groups: Vec<[u8; 9]> = GROUPS.iter()
@@ -69,12 +70,14 @@ impl Sudoku {
 			})
 	}
 
+	// Creates a shallow copy with one adjusted value.
 	fn change_cell(&self, index: u8, value:u8) -> Sudoku {
 		let mut new_values = self.numbers;
 		new_values[usize::from(index)] = value;
 		Sudoku{numbers: new_values}
 	}
 
+	// Does the puzzle in its current state satisfy the rules of Sudoku?
 	fn is_valid(&self) -> bool {
 		for group in GROUPS.iter() {
 			let values: [u8; 9] = self.get_group_values(group);
