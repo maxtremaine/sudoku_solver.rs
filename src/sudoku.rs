@@ -39,6 +39,7 @@ struct Sudoku {
 }
 
 impl Sudoku {
+	// Returns the values of a puzzle for a specific group.
 	fn get_group_values(&self, group: &[u8; 9]) -> [u8; 9] {
 		group.iter().enumerate()
 			.fold([0; 9], |mut acc, (i, group_index)| {
