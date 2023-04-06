@@ -1,9 +1,3 @@
-// Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
-struct Sudoku {
-	numbers: [u8; 81]
-}
-// - [x] Switch this to a struct so 'trait' doesn't have to be used.
-
 // Groups are sets of cells that must incorporate ints from 1 to 9.
 const GROUPS: [[u8; 9]; 27] = [
 	// Rows
@@ -38,11 +32,38 @@ const GROUPS: [[u8; 9]; 27] = [
 	[60, 61, 62, 69, 70, 71, 78, 79, 80],
 ];
 
+// Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
+struct Sudoku {
+	numbers: [u8; 81]
+}
+
 impl Sudoku {
 	fn get_group_values(&self, group: &[u8; 9]) -> [u8; 9] {
 		group.iter().enumerate()
 			.fold([0; 9], |mut acc, (i, group_index)| {
 				acc[i] = self.numbers[usize::from(*group_index)];
+				acc
+			})
+	}
+
+	fn get_related_cell_values(&self, index: u8) -> Vec<u8> {
+		// Get the groups associated with "index"
+		let related_groups: Vec<[u8; 9]> = GROUPS.iter()
+			.fold(Vec::new(), |mut acc, group| {
+				if group.contains(&index) {
+					acc.push(*group)
+				}
+				acc
+			});
+		// Get the values associated with those groups, without duplication or zeros
+		related_groups.iter()
+			.fold(Vec::new(), |mut acc, group| {
+				self.get_group_values(group).iter()
+					.for_each(|value| {
+						if *value != 0 && !acc.contains(value) {
+							acc.push(*value)
+						}
+					});
 				acc
 			})
 	}
@@ -85,12 +106,20 @@ mod tests {
 		0, 0, 0, 0, 0, 0, 0, 0, 0
 	];
 
+	const test_sudoku: Sudoku = Sudoku{numbers: TEST_PUZZLE};
+
 	#[test]
 	fn gets_group_values() {
 		let group_to_check = GROUPS[0];
-		let test_sudoku = Sudoku{numbers: TEST_PUZZLE};
+		
 		let correct_answer: [u8; 9] = [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ];
 		assert_eq!(test_sudoku.get_group_values(&group_to_check), correct_answer)
+	}
+
+	#[test]
+	fn gets_related_cell_values() {
+		let related_to_0 = vec![1, 2];
+		assert_eq!(related_to_0, test_sudoku.get_related_cell_values(0))
 	}
 
 	#[test]
