@@ -1,3 +1,6 @@
+use crate::blank_cell::BlankCell;
+use crate::pure_functions::get_missing_digits;
+
 // Groups are sets of cells that must incorporate ints from 1 to 9.
 const GROUPS: [[u8; 9]; 27] = [
 	// Rows
@@ -99,6 +102,19 @@ impl Sudoku {
 		}
 		true
 	}
+
+	// Gets all of the blank cells in the puzzle, with degrees of freedom.
+	fn get_blank_cells(&self) -> Vec<BlankCell> {
+		self.numbers.iter().enumerate().fold(Vec::new(), |mut blank_cells, (i, value)| {
+			if *value == 0 {
+				let related_cell_values: Vec<u8> = self.get_related_cell_values(i.try_into().unwrap());
+				let possible_values: Vec<u8> = get_missing_digits(related_cell_values);
+				let new_blank_cell = BlankCell{ index: i.try_into().unwrap(), possible_values};
+				blank_cells.push(new_blank_cell);
+			}
+			blank_cells
+		})
+	}
 }
 
 #[cfg(test)]
@@ -188,5 +204,24 @@ mod tests {
 		assert_eq!(true, Sudoku{numbers: TEST_PUZZLE}.is_valid());
         assert_eq!(false, Sudoku{numbers: invalid_puzzle_duplicates}.is_valid());
         assert_eq!(false, Sudoku{numbers: invalid_puzzle_greater_than_nine}.is_valid());
+	}
+
+	#[test]
+	fn gets_blank_cells() {
+		let missing_one = [
+            7, 0, 2, 9, 5, 4, 8, 3, 6,
+			5, 3, 9, 1, 8, 6, 2, 4, 7,
+			6, 8, 4, 2, 3, 7, 5, 1, 9,
+			3, 2, 5, 4, 7, 9, 6, 8, 1,
+			1, 9, 8, 3, 6, 5, 7, 2, 4,
+			4, 7, 6, 8, 2, 1, 9, 5, 3,
+			2, 4, 7, 5, 9, 3, 1, 6, 8,
+			8, 6, 1, 7, 4, 2, 3, 9, 5,
+			9, 5, 3, 6, 1, 8, 4, 7, 2
+        ];
+        let missing_one_puzzle = Sudoku{ numbers: missing_one };
+        let blank_cells_generated = missing_one_puzzle.get_blank_cells();
+        let blank_cells_created = vec![ BlankCell{ index: 1, possible_values: vec![1]}];
+        assert_eq!(blank_cells_created, blank_cells_generated);
 	}
 }
