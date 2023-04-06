@@ -37,8 +37,8 @@ const GROUPS: [[u8; 9]; 27] = [
 
 // Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
 #[derive(PartialEq, Debug)]
-struct Sudoku {
-	numbers: [u8; 81]
+pub struct Sudoku {
+	pub numbers: [u8; 81]
 }
 
 impl Sudoku {
@@ -75,14 +75,14 @@ impl Sudoku {
 	}
 
 	// Creates a shallow copy with one adjusted value.
-	fn change_cell(&self, index: u8, value:u8) -> Sudoku {
+	pub fn change_cell(&self, index: u8, value:u8) -> Sudoku {
 		let mut new_values = self.numbers;
 		new_values[usize::from(index)] = value;
 		Sudoku{numbers: new_values}
 	}
 
 	// Does the puzzle in its current state satisfy the rules of Sudoku?
-	fn is_valid(&self) -> bool {
+	pub fn is_valid(&self) -> bool {
 		for group in GROUPS.iter() {
 			let values: [u8; 9] = self.get_group_values(group);
 			for &value in values.iter() {
@@ -104,7 +104,7 @@ impl Sudoku {
 	}
 
 	// Gets all of the blank cells in the puzzle, with degrees of freedom.
-	fn get_blank_cells(&self) -> Vec<BlankCell> {
+	pub fn get_blank_cells(&self) -> Vec<BlankCell> {
 		self.numbers.iter().enumerate().fold(Vec::new(), |mut blank_cells, (i, value)| {
 			if *value == 0 {
 				let related_cell_values: Vec<u8> = self.get_related_cell_values(i.try_into().unwrap());
@@ -112,6 +112,7 @@ impl Sudoku {
 				let new_blank_cell = BlankCell{ index: i.try_into().unwrap(), possible_values};
 				blank_cells.push(new_blank_cell);
 			}
+			blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
 			blank_cells
 		})
 	}
