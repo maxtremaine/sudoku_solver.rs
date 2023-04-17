@@ -41,4 +41,4 @@ The completed puzzle will be printed to the terminal after all of the cells are 
 
 ## To Do
 
-- [ ] Run cargo build --release to benchmark an optimized binary.
+- [ ] Update README to include reasoning and philosophy
