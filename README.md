@@ -38,3 +38,7 @@ cargo run
 ```
 
 The completed puzzle will be printed to the terminal after all of the cells are filled.
+
+## To Do
+
+- [ ] Run cargo build --release to benchmark an optimized binary.
