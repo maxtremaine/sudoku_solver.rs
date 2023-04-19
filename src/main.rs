@@ -3,27 +3,17 @@ mod blank_cell;
 mod pure_functions;
 
 use std::time::Instant;
+use std::fs::read_to_string;
 use sudoku::Sudoku;
 
 fn main() {
     // Start the clock.
     let t0 = Instant::now();
-    
-    // Put your start puzzle here.
-    let starting_grid: [u8; 81] = [
-    //col: a  b  c  d  e  f  g  h  i    row:
-           0, 0, 0, 0, 0, 0, 0, 0, 0, // 1
-           0, 3, 0, 1, 0, 6, 2, 0, 7, // 2
-           6, 0, 0, 0, 3, 0, 5, 1, 0, // 3
-           3, 2, 0, 0, 0, 9, 0, 0, 0, // 4
-           0, 0, 8, 0, 0, 5, 7, 0, 0, // 5
-           0, 0, 0, 8, 0, 0, 0, 5, 3, // 6
-           0, 4, 7, 0, 9, 0, 0, 0, 8, // 7
-           8, 0, 1, 7, 0, 2, 0, 9, 0, // 8
-           0, 0, 0, 0, 0, 0, 0, 0, 0  // 9
-    ];
 
-    let start_puzzle = Sudoku{ numbers: starting_grid };
+    let start_file: String = read_to_string("./io/start.sudoku")
+        .expect("Unable to read file.");
+
+    let start_puzzle = Sudoku::from(start_file);
 
     // Stop if the input is not valid.
     if !start_puzzle.is_valid() {

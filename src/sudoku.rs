@@ -49,7 +49,7 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
-	fn from(sudoku_string: String) -> Self {
+	pub fn from(sudoku_string: String) -> Self {
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
