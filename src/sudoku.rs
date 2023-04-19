@@ -35,6 +35,12 @@ const GROUPS: [[u8; 9]; 27] = [
 	[60, 61, 62, 69, 70, 71, 78, 79, 80],
 ];
 
+const FILE_TO_STRING_INDEXES: [u8; 81] = [16, 17, 18, 20, 21, 22, 24, 25, 26, 30, 31, 32, 34, 35,
+	36, 38, 39, 40, 44, 45, 46, 48, 49, 50, 52, 53, 54, 72, 73, 74, 76, 77, 78, 80, 81, 82, 86,
+	87, 88, 90, 91, 92, 94, 95, 96, 100, 101, 102, 104, 105, 106, 108, 109, 110, 128, 129, 130,
+	132, 133, 134, 136, 137, 138, 142, 143, 144, 146, 147, 148, 150, 151, 152, 156, 157, 158, 160,
+	161, 162, 164, 165, 166];
+
 // Puzzles are represented as 81 ints, top left across and down, with 0s for empty cells.
 #[derive(PartialEq, Debug)]
 pub struct Sudoku {
@@ -42,6 +48,21 @@ pub struct Sudoku {
 }
 
 impl Sudoku {
+	fn from(sudoku_string: String) -> Self {
+		let sudoku_string = sudoku_string.as_bytes();
+		let mut output: [u8; 81] = [0; 81];
+		for (array_index, string_index) in FILE_TO_STRING_INDEXES.iter().enumerate() {
+			let string_index = usize::from(*string_index);
+			let character = char::from(sudoku_string[string_index]);
+			if character != '_' {
+				let mut int_value: u8 = character.try_into().unwrap();
+				int_value -= 48;
+				output[array_index] = int_value;
+			}
+		}
+		Self{numbers: output}
+	}
+
 	// Returns the values of a puzzle for a specific group.
 	fn get_group_values(&self, group: &[u8; 9]) -> [u8; 9] {
 		group.iter().enumerate()
@@ -136,17 +157,27 @@ mod tests {
 
 	const TEST_SUDOKU: Sudoku = Sudoku{numbers: TEST_PUZZLE};
 
+	
+	#[test]
+	fn creates_puzzle_from_file() {
+		let valid_file: String = String::from("  abc def ghi\n1 7__|_4_|__1\n2 __1|___|2__\n3 _6_|2_9|_8_\n  -----------\n4 __3|5_4|9__\n5 1__|___|__4\n6 __2|1_8|5__\n  -----------\n7 _1_|9_6|_7_\n8 __8|___|4__\n9 6__|_2_|__8");
+		let corresponding_puzzle: Sudoku = Sudoku{ numbers: [7, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 6, 0, 2, 0,
+			9, 0, 8, 0, 0, 0, 3, 5, 0, 4, 9, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 2, 1, 0, 8, 5, 0,
+			0, 0, 1, 0, 9, 0, 6, 0, 7, 0, 0, 0, 8, 0, 0, 0, 4, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 8]};
+		assert_eq!(Sudoku::from(valid_file), corresponding_puzzle)
+	}
+
 	#[test]
 	fn gets_group_values() {
 		let group_to_check = GROUPS[0];
 		let correct_answer: [u8; 9] = [ 0, 1, 0, 0, 0, 0, 2, 0, 0 ];
-		assert_eq!(TEST_SUDOKU.get_group_values(&group_to_check), correct_answer)
+		assert_eq!(TEST_SUDOKU.get_group_values(&group_to_check), correct_answer);
 	}
 
 	#[test]
 	fn gets_related_cell_values() {
 		let related_to_0 = vec![1, 2];
-		assert_eq!(related_to_0, TEST_SUDOKU.get_related_cell_values(0))
+		assert_eq!(related_to_0, TEST_SUDOKU.get_related_cell_values(0));
 	}
 
 	#[test]
