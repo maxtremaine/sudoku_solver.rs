@@ -48,19 +48,22 @@ pub struct Sudoku {
 }
 
 impl Sudoku {
+	// Turns a .sudoku file into a Sudoku puzzle.
 	fn from(sudoku_string: String) -> Self {
 		let sudoku_string = sudoku_string.as_bytes();
-		let mut output: [u8; 81] = [0; 81];
-		for (array_index, string_index) in FILE_TO_STRING_INDEXES.iter().enumerate() {
-			let string_index = usize::from(*string_index);
-			let character = char::from(sudoku_string[string_index]);
-			if character != '_' {
-				let mut int_value: u8 = character.try_into().unwrap();
-				int_value -= 48;
-				output[array_index] = int_value;
-			}
-		}
-		Self{numbers: output}
+		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
+			.enumerate()
+			.fold([0; 81], |mut acc, (array_index, string_index)| {
+				let string_index = usize::from(*string_index);
+				let character = char::from(sudoku_string[string_index]);
+				if character != '_' {
+					let mut int_value: u8 = character.try_into().unwrap();
+					int_value -= 48; // Convert from byte to int.
+					acc[array_index] = int_value;
+				}
+				acc
+			});
+		Self{numbers}
 	}
 
 	// Returns the values of a puzzle for a specific group.
