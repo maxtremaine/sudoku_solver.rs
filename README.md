@@ -41,7 +41,3 @@ cargo run
 ```
 
 The completed puzzle will be printed to the terminal after all of the cells are filled.
-
-## To Do
-
-- [ ] Update README to include reasoning and philosophy
