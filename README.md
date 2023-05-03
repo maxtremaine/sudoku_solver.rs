@@ -2,6 +2,10 @@
 
 Solves sudoku so I don't have to, in Rust!
 
+## Reason and Philosophy
+
+I haven't been able to keep up with coding as much as I would have, but I do spend an unnecessary amount of time doing sudoku puzzles, so I thought, "Hey, I should combine the two." I have tried to make the program easy to interact with, and be highly efficient without becoming bloated with different systems/tactics for solving puzzles. I hope that at least the .sudoku file type and interpreter functions are useful to other people who want to play with sudoku as a platform.
+
 ## How to solve puzzles.
 
 First, you need to have [rust](https://www.rust-lang.org/).
