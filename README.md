@@ -13,22 +13,21 @@ cd Desktop
 git clone https://github.com/maxtremaine/sudoku_solver.git
 ```
 
-Then, you can add your starting puzzle in src/main.rs.
+Next, update the file in io/start.sudoku to reflect your puzzle to solve.
 
-```rs
-12.     // Put your start puzzle here.
-13.     let start_puzzle: [u8; 81] = [
-14.     //col: a  b  c  d  e  f  g  h  i    row:
-15.            0, 0, 0, 0, 0, 0, 0, 0, 0, // 1
-16.            0, 3, 0, 1, 0, 6, 2, 0, 7, // 2
-17.            6, 0, 0, 0, 3, 0, 5, 1, 0, // 3
-18.            3, 2, 0, 0, 0, 9, 0, 0, 0, // 4
-19.            0, 0, 8, 0, 0, 5, 7, 0, 0, // 5
-20.            0, 0, 0, 8, 0, 0, 0, 5, 3, // 6
-21.            0, 4, 7, 0, 9, 0, 0, 0, 8, // 7
-22.            8, 0, 1, 7, 0, 2, 0, 9, 0, // 8
-23.            0, 0, 0, 0, 0, 0, 0, 0, 0  // 9
-24.     ];
+```
+  abc def ghi
+1 ___|___|___
+2 _3_|1_6|2_7
+3 6__|_3_|51_
+  -----------
+4 32_|__9|___
+5 __8|__5|7__
+6 ___|8__|_53
+  -----------
+7 _47|_9_|__8
+8 8_1|7_2|_9_
+9 ___|___|___
 ```
 
 Alright, now you're ready to run.
