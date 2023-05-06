@@ -33,7 +33,7 @@ fn main() {
         });
 
     let output_file = output[0].to_string();
-    println!("\nFinished Puzzle:\n{}", output[0].to_string());
+    println!("\nFinished Puzzle:\n{}", output_file);
     write("./io/finish.sudoku", output_file).expect("Unable to write file.");
 
     let elapsed = t0.elapsed();
