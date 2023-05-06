@@ -2,7 +2,7 @@ use crate::blank_cell::BlankCell;
 use crate::pure_functions::get_missing_digits;
 
 // Groups are sets of cells that must incorporate ints from 1 to 9.
-const GROUPS: [[u8; 9]; 27] = [
+const GROUPS: [[usize; 9]; 27] = [
 	// Rows
 	[0, 1, 2, 3, 4, 5, 6, 7, 8],
 	[9, 10, 11, 12, 13, 14, 15, 16, 17],
@@ -63,7 +63,7 @@ impl Sudoku {
 				}
 				acc
 			});
-		let output: Self = Self{numbers};
+		let output = Self{numbers};
 		if !output.is_valid() {
 			return Err("The puzzle is not valid.")
 		}
@@ -71,18 +71,18 @@ impl Sudoku {
 	}
 
 	// Returns the values of a puzzle for a specific group.
-	fn get_group_values(&self, group: &[u8; 9]) -> [u8; 9] {
+	fn get_group_values(&self, group: &[usize; 9]) -> [u8; 9] {
 		group.iter().enumerate()
 			.fold([0; 9], |mut acc, (i, group_index)| {
-				acc[i] = self.numbers[usize::from(*group_index)];
+				acc[i] = self.numbers[*group_index];
 				acc
 			})
 	}
 
 	// Using a simple /81 index, what cells have to include 1-9 to satisfy the rules of Sudoku?
-	fn get_related_cell_values(&self, index: u8) -> Vec<u8> {
+	fn get_related_cell_values(&self, index: usize) -> Vec<u8> {
 		// Get the groups associated with "index"
-		let related_groups: Vec<[u8; 9]> = GROUPS.iter()
+		let related_groups: Vec<[usize; 9]> = GROUPS.iter()
 			.fold(Vec::new(), |mut acc, group| {
 				if group.contains(&index) {
 					acc.push(*group)
@@ -103,10 +103,10 @@ impl Sudoku {
 	}
 
 	// Creates a shallow copy with one adjusted value.
-	pub fn change_cell(&self, index: u8, value:u8) -> Sudoku {
+	pub fn change_cell(&self, index: u8, value:u8) -> Self {
 		let mut new_values = self.numbers;
 		new_values[usize::from(index)] = value;
-		Sudoku{numbers: new_values}
+		Self{numbers: new_values}
 	}
 
 	// Does the puzzle in its current state satisfy the rules of Sudoku?
@@ -135,7 +135,7 @@ impl Sudoku {
 	pub fn get_blank_cells(&self) -> Vec<BlankCell> {
 		self.numbers.iter().enumerate().fold(Vec::new(), |mut blank_cells, (i, value)| {
 			if *value == 0 {
-				let related_cell_values: Vec<u8> = self.get_related_cell_values(i.try_into().unwrap());
+				let related_cell_values: Vec<u8> = self.get_related_cell_values(i);
 				let possible_values: Vec<u8> = get_missing_digits(related_cell_values);
 				let new_blank_cell = BlankCell{ index: i.try_into().unwrap(), possible_values};
 				blank_cells.push(new_blank_cell);
