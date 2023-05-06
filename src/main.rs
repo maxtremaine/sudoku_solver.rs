@@ -3,7 +3,7 @@ mod blank_cell;
 mod pure_functions;
 
 use std::time::Instant;
-use std::fs::read_to_string;
+use std::fs::{read_to_string, write};
 use sudoku::Sudoku;
 
 fn main() {
@@ -33,7 +33,9 @@ fn main() {
             new_working_branches
         });
 
+    let output_file = output[0].to_string();
     println!("Finished Puzzle:\n{}", output[0].to_string());
+    write("./io/finish.sudoku", output_file).expect("Unable to write file.");
 
     let elapsed = t0.elapsed();
     println!("\nElapsed: {:.2?}", elapsed);
