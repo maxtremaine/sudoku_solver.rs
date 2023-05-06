@@ -13,12 +13,8 @@ fn main() {
     let start_file: String = read_to_string("./io/start.sudoku")
         .expect("Unable to read file.");
 
-    let start_puzzle = Sudoku::from(start_file);
-
-    // Stop if the input is not valid.
-    if !start_puzzle.is_valid() {
-        panic!("The start puzzle is not valid.")
-    }
+    let start_puzzle = Sudoku::from(start_file)
+        .expect("The start puzzle is not valid.");
     
     // Count the number of blank cells.
     let max_run_index: u8 = start_puzzle.get_blank_cells().len().try_into().unwrap();

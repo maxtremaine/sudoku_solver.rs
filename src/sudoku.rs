@@ -49,7 +49,7 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
-	pub fn from(sudoku_string: String) -> Self {
+	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
@@ -63,7 +63,11 @@ impl Sudoku {
 				}
 				acc
 			});
-		Self{numbers}
+		let output: Self = Self{numbers};
+		if !output.is_valid() {
+			return Err("The puzzle is not valid.")
+		}
+		Ok(output)
 	}
 
 	// Returns the values of a puzzle for a specific group.
@@ -106,7 +110,7 @@ impl Sudoku {
 	}
 
 	// Does the puzzle in its current state satisfy the rules of Sudoku?
-	pub fn is_valid(&self) -> bool {
+	fn is_valid(&self) -> bool {
 		for group in GROUPS.iter() {
 			let values: [u8; 9] = self.get_group_values(group);
 			for &value in values.iter() {
@@ -193,7 +197,7 @@ mod tests {
 		let corresponding_puzzle: Sudoku = Sudoku{ numbers: [7, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 6, 0, 2, 0,
 			9, 0, 8, 0, 0, 0, 3, 5, 0, 4, 9, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 2, 1, 0, 8, 5, 0,
 			0, 0, 1, 0, 9, 0, 6, 0, 7, 0, 0, 0, 8, 0, 0, 0, 4, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 8]};
-		assert_eq!(Sudoku::from(valid_file), corresponding_puzzle)
+		assert_eq!(Sudoku::from(valid_file).unwrap(), corresponding_puzzle)
 	}
 
 	#[test]
