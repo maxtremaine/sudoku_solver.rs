@@ -7,20 +7,18 @@ use std::fs::{read_to_string, write};
 use sudoku::Sudoku;
 
 fn main() {
-    // Start the clock.
     let t0 = Instant::now();
 
-    let start_file: String = read_to_string("./io/start.sudoku")
+    let start_file = read_to_string("./io/start.sudoku")
         .expect("Unable to read file.");
 
     let start_puzzle = Sudoku::from(start_file)
         .expect("The start puzzle is not valid.");
     
-    // Count the number of blank cells.
-    let max_run_index: u8 = start_puzzle.get_blank_cells().len().try_into().unwrap();
+    let max_run_index = start_puzzle.get_blank_cells().len();
 
     let output: Vec<Sudoku> = (1..=max_run_index)
-        .fold(Vec::from([start_puzzle]), |working_branches, run_count| -> Vec<Sudoku> {
+        .fold(Vec::from([start_puzzle]), |working_branches, run_count| {
             let new_working_branches = working_branches.iter().fold(Vec::new(), |mut new_branches, current_branch| -> Vec<Sudoku> {
                 let blank_cells = current_branch.get_blank_cells();
                 let lowest_cell = &blank_cells[0];
