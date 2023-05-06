@@ -49,7 +49,7 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
-	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
+	pub fn from(sudoku_string: String) -> Self {
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
@@ -57,20 +57,13 @@ impl Sudoku {
 				let string_index = usize::from(*string_index);
 				let character = char::from(sudoku_string[string_index]);
 				if character != '_' {
-					let int_value: u8 = character.to_digit(10)
-						.unwrap() // char -> u32
-						.try_into()
-						.unwrap(); // u32 -> u8
+					let mut int_value: u8 = character.try_into().unwrap();
+					int_value -= 48; // Convert from byte to int.
 					acc[array_index] = int_value;
 				}
 				acc
 			});
-		let output = Self{numbers};
-		if output.is_valid() {
-			Ok(output)
-		} else {
-			Err("The .sudoku file is not a valid puzzle.")
-		}
+		Self{numbers}
 	}
 
 	// Returns the values of a puzzle for a specific group.
@@ -113,7 +106,7 @@ impl Sudoku {
 	}
 
 	// Does the puzzle in its current state satisfy the rules of Sudoku?
-	fn is_valid(&self) -> bool {
+	pub fn is_valid(&self) -> bool {
 		for group in GROUPS.iter() {
 			let values: [u8; 9] = self.get_group_values(group);
 			for &value in values.iter() {
@@ -147,6 +140,32 @@ impl Sudoku {
 			blank_cells
 		})
 	}
+
+	pub fn to_string(&self) -> String {
+		let mut working_string: [char; 167] = [' ', ' ', 'a', 'b', 'c', ' ', 'd', 'e', 'f', ' ', 'g',
+			'h', 'i', '\n', '1', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n',
+			'2', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n', '3', ' ', '_',
+			'_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n', ' ', ' ', '-', '-', '-', '-',
+			'-', '-', '-', '-', '-', '-', '-', '\n', '4', ' ', '_', '_', '_', '|', '_', '_', '_',
+			'|', '_', '_', '_', '\n', '5', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_',
+			'_', '\n', '6', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n', ' ',
+			' ', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '\n', '7', ' ', '_', '_',
+			'_', '|', '_', '_', '_', '|', '_', '_', '_', '\n', '8', ' ', '_', '_', '_', '|', '_',
+			'_', '_', '|', '_', '_', '_', '\n', '9', ' ', '_', '_', '_', '|', '_', '_', '_', '|',
+			'_', '_', '_'];
+		
+		working_string = FILE_TO_STRING_INDEXES.iter().enumerate()
+			.fold(working_string, |mut working_string, (puzzle_index, string_index)| {
+				let int_value: u8 = self.numbers[puzzle_index];
+				let char_value: char = format!("{int_value}").chars().nth(0).unwrap();
+				working_string[usize::from(*string_index)] = char_value;
+				working_string
+			});
+		working_string.iter().fold(String::from(""), |mut acc, character| {
+			acc.push(*character);
+			acc
+		})
+	}
 }
 
 #[cfg(test)]
@@ -174,7 +193,17 @@ mod tests {
 		let corresponding_puzzle: Sudoku = Sudoku{ numbers: [7, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 6, 0, 2, 0,
 			9, 0, 8, 0, 0, 0, 3, 5, 0, 4, 9, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 2, 1, 0, 8, 5, 0,
 			0, 0, 1, 0, 9, 0, 6, 0, 7, 0, 0, 0, 8, 0, 0, 0, 4, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 8]};
-		assert_eq!(Sudoku::from(valid_file).unwrap(), corresponding_puzzle)
+		assert_eq!(Sudoku::from(valid_file), corresponding_puzzle)
+	}
+
+	#[test]
+	fn creates_file_from_puzzle() {
+		let valid_file: String = String::from("  abc def ghi\n1 712|954|836\n2 539|186|247\n3 684|237|519\n  -----------\n4 325|479|681\n5 198|365|724\n6 476|821|953\n  -----------\n7 247|593|168\n8 861|742|395\n9 953|618|472");
+		let corresponding_puzzle: Sudoku = Sudoku{ numbers: [7, 1, 2, 9, 5, 4, 8, 3, 6, 5, 3, 9, 1,
+				8, 6, 2, 4, 7, 6, 8, 4, 2, 3, 7, 5, 1, 9, 3, 2, 5, 4, 7, 9, 6, 8, 1, 1, 9, 8, 3, 6,
+				5, 7, 2, 4, 4, 7, 6, 8, 2, 1, 9, 5, 3, 2, 4, 7, 5, 9, 3, 1, 6, 8, 8, 6, 1, 7, 4, 2,
+				3, 9, 5, 9, 5, 3, 6, 1, 8, 4, 7, 2]};
+		assert_eq!(corresponding_puzzle.to_string(), valid_file)
 	}
 
 	#[test]
