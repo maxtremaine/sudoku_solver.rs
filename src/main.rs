@@ -17,6 +17,7 @@ fn main() {
     
     let max_run_index = start_puzzle.get_blank_cells().len();
 
+    // Add to working puzzles and collapse when no options are available.
     let output: Vec<Sudoku> = (1..=max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| {
             let new_working_branches = working_branches.iter().fold(Vec::new(), |mut new_branches, current_branch| -> Vec<Sudoku> {
