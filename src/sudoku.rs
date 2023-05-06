@@ -35,7 +35,7 @@ const GROUPS: [[usize; 9]; 27] = [
 	[60, 61, 62, 69, 70, 71, 78, 79, 80],
 ];
 
-const FILE_TO_STRING_INDEXES: [u8; 81] = [16, 17, 18, 20, 21, 22, 24, 25, 26, 30, 31, 32, 34, 35,
+const FILE_TO_STRING_INDEXES: [usize; 81] = [16, 17, 18, 20, 21, 22, 24, 25, 26, 30, 31, 32, 34, 35,
 	36, 38, 39, 40, 44, 45, 46, 48, 49, 50, 52, 53, 54, 72, 73, 74, 76, 77, 78, 80, 81, 82, 86,
 	87, 88, 90, 91, 92, 94, 95, 96, 100, 101, 102, 104, 105, 106, 108, 109, 110, 128, 129, 130,
 	132, 133, 134, 136, 137, 138, 142, 143, 144, 146, 147, 148, 150, 151, 152, 156, 157, 158, 160,
@@ -54,8 +54,7 @@ impl Sudoku {
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
 			.fold([0; 81], |mut acc, (array_index, string_index)| {
-				let string_index = usize::from(*string_index);
-				let character = char::from(sudoku_string[string_index]);
+				let character = char::from(sudoku_string[*string_index]);
 				if character != '_' {
 					let mut int_value: u8 = character.try_into().unwrap();
 					int_value -= 48; // Convert from byte to int.
@@ -162,7 +161,7 @@ impl Sudoku {
 			.fold(working_string, |mut working_string, (puzzle_index, string_index)| {
 				let int_value: u8 = self.numbers[puzzle_index];
 				let char_value: char = format!("{int_value}").chars().nth(0).unwrap();
-				working_string[usize::from(*string_index)] = char_value;
+				working_string[*string_index] = char_value;
 				working_string
 			});
 		working_string.iter().fold(String::from(""), |mut acc, character| {
