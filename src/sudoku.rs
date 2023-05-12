@@ -49,7 +49,7 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
-	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
+	pub fn from_file(sudoku_string: String) -> Result<Self, &'static str> {
 		if sudoku_string.len() != 167 {
 			return Err("A .sudoku file must be 167 characters long.")
 		}
@@ -66,7 +66,12 @@ impl Sudoku {
 				}
 				acc
 			});
-		let output = Self{numbers};
+		let output = Self::from_array(numbers)?;
+		Ok(output)
+	}
+
+	pub fn from_array(puzzle_values: [u8; 81]) -> Result<Self, &'static str> {
+		let output = Self{numbers: puzzle_values};
 		if !output.is_valid() {
 			return Err("The Sudoku file does not have a valid solution.")
 		}
@@ -204,7 +209,7 @@ mod tests {
 		let corresponding_puzzle: Sudoku = Sudoku{ numbers: [7, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 6, 0, 2, 0,
 			9, 0, 8, 0, 0, 0, 3, 5, 0, 4, 9, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 2, 1, 0, 8, 5, 0,
 			0, 0, 1, 0, 9, 0, 6, 0, 7, 0, 0, 0, 8, 0, 0, 0, 4, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 8]};
-		assert_eq!(Sudoku::from(valid_file).unwrap(), corresponding_puzzle)
+		assert_eq!(Sudoku::from_file(valid_file).unwrap(), corresponding_puzzle)
 	}
 
 	#[test]

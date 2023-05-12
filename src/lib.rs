@@ -9,7 +9,7 @@ pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'stati
     if verbose {
         println!("\n");
     }
-    let start_puzzle = Sudoku::from(input_sudoku_file)?;
+    let start_puzzle = Sudoku::from_file(input_sudoku_file)?;
     let max_run_index = start_puzzle.get_blank_cells().len();
     
     // Add to working puzzles and collapse when no options are available.
