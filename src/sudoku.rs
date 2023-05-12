@@ -53,12 +53,11 @@ impl Sudoku {
 		if sudoku_string.len() != 167 {
 			return Err("A .sudoku file must be 167 characters long.")
 		}
-		// TODO: Switch sudoku string to chars.
-		let sudoku_string = sudoku_string.as_bytes();
+		let sudoku_string_chars: Vec<char> = sudoku_string.chars().collect();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
 			.fold([0; 81], |mut acc, (array_index, string_index)| {
-				let character = char::from(sudoku_string[*string_index]);
+				let character = sudoku_string_chars[*string_index];
 				if character != '_' {
 					let mut int_value: u8 = u32::from(character).try_into().unwrap();
 					int_value -= 48; // Convert from byte to int.
