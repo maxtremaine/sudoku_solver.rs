@@ -4,3 +4,5 @@ fn solves_puzzles() {
     let output_sudoku_file = String::from("  abc def ghi\n1 712|954|836\n2 539|186|247\n3 684|237|519\n  -----------\n4 325|479|681\n5 198|365|724\n6 476|821|953\n  -----------\n7 247|593|168\n8 861|742|395\n9 953|618|472");
     assert_eq!(sudoku_solver_rs::solve(input_sudoku_file, false).unwrap(), output_sudoku_file);
 }
+
+// TODO: Test error propagation.
