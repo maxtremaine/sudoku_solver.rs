@@ -4,6 +4,7 @@ mod pure_functions;
 
 use sudoku::Sudoku;
 
+// TODO: Add solve for an array of u8s.
 pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'static str> {
     if verbose {
         println!("\n");
@@ -11,6 +12,7 @@ pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'stati
 
     let start_puzzle = Sudoku::from(input_sudoku_file);
 
+    // TODO: Move error propagation to question mark operator.
     if start_puzzle.is_err() {
         return Err(start_puzzle.err().unwrap());
     }
