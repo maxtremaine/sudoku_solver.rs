@@ -111,9 +111,9 @@ impl Sudoku {
 	}
 
 	// Creates a shallow copy with one adjusted value.
-	pub fn change_cell(&self, index: u8, value:u8) -> Self {
+	pub fn change_cell(&self, index: usize, value:u8) -> Self {
 		let mut new_values = self.numbers;
-		new_values[usize::from(index)] = value;
+		new_values[index] = value;
 		Self{numbers: new_values}
 	}
 
