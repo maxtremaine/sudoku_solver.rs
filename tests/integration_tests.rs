@@ -5,4 +5,12 @@ fn solves_puzzles() {
     assert_eq!(sudoku_solver_rs::solve(input_sudoku_file, false).unwrap(), output_sudoku_file);
 }
 
-// TODO: Test error propagation.
+#[test]
+fn raises_errors() {
+    let short_string = String::from("hello");
+    let invalid_sudoku_file = String::from("  abc def ghi\n1 111|___|___\n2 _3_|1_6|2_7\n3 6__|_3_|51_\n  -----------\n4 32_|__9|___\n5 __8|__5|7__\n6 ___|8__|_53\n  -----------\n7 _47|_9_|__8\n8 8_1|7_2|_9_\n9 ___|___|___");
+    assert_eq!(sudoku_solver_rs::solve(short_string, false).unwrap_err(),
+        "A .sudoku file must be 167 characters long.");
+    assert_eq!(sudoku_solver_rs::solve(invalid_sudoku_file, false).unwrap_err(),
+    "The Sudoku file does not have a valid solution.");
+}
