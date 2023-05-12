@@ -4,7 +4,6 @@ mod pure_functions;
 
 use sudoku::Sudoku;
 
-// TODO: Add solve for an array of u8s.
 pub fn solve_file(input_sudoku_file: String, verbose: bool) -> Result<String, &'static str> {
     if verbose {
         println!("\n");
