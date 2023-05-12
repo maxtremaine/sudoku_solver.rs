@@ -194,8 +194,8 @@ impl Sudoku {
 		
 		working_string = FILE_TO_STRING_INDEXES.iter().enumerate()
 			.fold(working_string, |mut working_string, (puzzle_index, string_index)| {
-				let int_value: u8 = self.numbers[puzzle_index];
-				let char_value: char = format!("{}", int_value).chars().nth(0).unwrap();
+				let int_value = u32::from(self.numbers[puzzle_index]);
+				let char_value = char::from_digit(int_value, 10).unwrap();
 				working_string[*string_index] = char_value;
 				working_string
 			});
