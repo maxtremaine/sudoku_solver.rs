@@ -49,8 +49,10 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
-	// TODO: Add a string length check for error handling.
 	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
+		if sudoku_string.len() != 167 {
+			return Err("A .sudoku file must be 167 characters long.");
+		}
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
@@ -65,7 +67,7 @@ impl Sudoku {
 			});
 		let output = Self{numbers};
 		if !output.is_valid() {
-			return Err("The puzzle is not valid.")
+			return Err("The Sudoku file does not have a valid solution.")
 		}
 		Ok(output)
 	}
