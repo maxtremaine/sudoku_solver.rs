@@ -51,7 +51,7 @@ impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
 	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
 		if sudoku_string.len() != 167 {
-			return Err("A .sudoku file must be 167 characters long.");
+			return Err("A .sudoku file must be 167 characters long.")
 		}
 		// TODO: Switch sudoku string to chars.
 		let sudoku_string = sudoku_string.as_bytes();
