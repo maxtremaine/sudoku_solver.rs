@@ -12,5 +12,5 @@ fn raises_errors() {
     assert_eq!(sudoku_solver_rs::solve(short_string, false).unwrap_err(),
         "A .sudoku file must be 167 characters long.");
     assert_eq!(sudoku_solver_rs::solve(invalid_sudoku_file, false).unwrap_err(),
-    "The Sudoku file does not have a valid solution.");
+        "The Sudoku file does not have a valid solution.");
 }
