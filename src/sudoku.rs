@@ -87,18 +87,17 @@ impl Sudoku {
 	}
 
 	// Using a simple /81 index, what cells have to include 1-9 to satisfy the rules of Sudoku?
-	// TODO: Break out get_related_cell_indexes for TDD.
 	fn get_related_cell_values(&self, index: usize) -> Vec<u8> {
-		// Get the groups associated with "index"
-		let related_groups: Vec<[usize; 9]> = GROUPS.iter()
+		GROUPS.iter()
+			// Filter groups that include index.
 			.fold(Vec::new(), |mut acc, group| {
 				if group.contains(&index) {
 					acc.push(*group)
 				}
 				acc
-			});
-		// Get the values associated with those groups, without duplication or zeros
-		related_groups.iter()
+			})
+			.iter()
+			// Get values for each group.
 			.fold(Vec::new(), |mut acc, group| {
 				self.get_group_values(group).iter()
 					.for_each(|value| {
@@ -141,16 +140,18 @@ impl Sudoku {
 
 	// Gets all of the blank cells in the puzzle, with degrees of freedom.
 	pub fn get_blank_cells(&self) -> Vec<BlankCell> {
-		self.numbers.iter().enumerate().fold(Vec::new(), |mut blank_cells, (i, value)| {
-			if *value == 0 {
-				let related_cell_values: Vec<u8> = self.get_related_cell_values(i);
-				let possible_values: Vec<u8> = get_missing_digits(related_cell_values);
-				let new_blank_cell = BlankCell{ index: i.try_into().unwrap(), possible_values};
-				blank_cells.push(new_blank_cell);
-			}
-			blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
-			blank_cells
-		})
+		self.numbers.iter()
+			.enumerate()
+			.fold(Vec::new(), |mut blank_cells, (i, value)| {
+				if *value == 0 {
+					let related_cell_values: Vec<u8> = self.get_related_cell_values(i);
+					let possible_values: Vec<u8> = get_missing_digits(related_cell_values);
+					let new_blank_cell = BlankCell{ index: i.try_into().unwrap(), possible_values};
+					blank_cells.push(new_blank_cell);
+				}
+				blank_cells.sort_by(|a, b| a.possible_values.len().cmp(&b.possible_values.len()));
+				blank_cells
+			})
 	}
 
 	pub fn get_valid_solutions(self, verbose: bool) -> Vec<Self> {
@@ -177,7 +178,7 @@ impl Sudoku {
 	}
 
 	pub fn to_string(&self) -> String {
-		let mut working_string: [char; 167] = [
+		let empty_string: [char; 167] = [
 			' ', ' ', 'a', 'b', 'c', ' ', 'd', 'e', 'f', ' ', 'g', 'h', 'i', '\n',
 			'1', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n',
 			'2', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_', '\n',
@@ -192,17 +193,19 @@ impl Sudoku {
 			'9', ' ', '_', '_', '_', '|', '_', '_', '_', '|', '_', '_', '_'
 		];
 		
-		working_string = FILE_TO_STRING_INDEXES.iter().enumerate()
-			.fold(working_string, |mut working_string, (puzzle_index, string_index)| {
+		FILE_TO_STRING_INDEXES.iter()
+			.enumerate()
+			.fold(empty_string, |mut working_string, (puzzle_index, string_index)| {
 				let int_value = u32::from(self.numbers[puzzle_index]);
 				let char_value = char::from_digit(int_value, 10).unwrap();
 				working_string[*string_index] = char_value;
 				working_string
-			});
-		working_string.iter().fold(String::from(""), |mut acc, character| {
-			acc.push(*character);
-			acc
-		})
+			})
+			.iter()
+			.fold(String::from(""), |mut acc, character| {
+				acc.push(*character);
+				acc
+			})
 	}
 }
 
