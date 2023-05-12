@@ -8,13 +8,13 @@ pub fn solve_file(input_sudoku_file: String, verbose: bool) -> Result<String, &'
     if verbose {
         println!("\n");
     }
-    let start_puzzle = Sudoku::from_file(input_sudoku_file)?;
-    let output = start_puzzle.get_valid_solutions(verbose);
-    let output_sudoku_file = output[0].to_string();
+    let output_file = Sudoku::from_file(input_sudoku_file)?
+        .get_valid_solutions(verbose)[0]
+        .to_string();
     if verbose {
-        println!("\nFinished Puzzle:\n\n{}\n", output_sudoku_file);
+        println!("\nFinished Puzzle:\n\n{}\n", output_file);
     }
-    Ok(output_sudoku_file)
+    Ok(output_file)
 }
 
 pub fn solve(input_values: [u8; 81], verbose: bool) -> Result<[u8; 81], &'static str> {
