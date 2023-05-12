@@ -66,11 +66,11 @@ impl Sudoku {
 				}
 				acc
 			});
-		let output = Self::from_array(numbers)?;
+		let output = Self::from(numbers)?;
 		Ok(output)
 	}
 
-	pub fn from_array(puzzle_values: [u8; 81]) -> Result<Self, &'static str> {
+	pub fn from(puzzle_values: [u8; 81]) -> Result<Self, &'static str> {
 		let output = Self{numbers: puzzle_values};
 		if !output.is_valid() {
 			return Err("The Sudoku file does not have a valid solution.")
