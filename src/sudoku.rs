@@ -56,7 +56,7 @@ impl Sudoku {
 			.fold([0; 81], |mut acc, (array_index, string_index)| {
 				let character = char::from(sudoku_string[*string_index]);
 				if character != '_' {
-					let mut int_value: u8 = character.try_into().unwrap();
+					let mut int_value: u8 = u32::from(character).try_into().unwrap();
 					int_value -= 48; // Convert from byte to int.
 					acc[array_index] = int_value;
 				}
@@ -163,7 +163,7 @@ impl Sudoku {
 		working_string = FILE_TO_STRING_INDEXES.iter().enumerate()
 			.fold(working_string, |mut working_string, (puzzle_index, string_index)| {
 				let int_value: u8 = self.numbers[puzzle_index];
-				let char_value: char = format!("{int_value}").chars().nth(0).unwrap();
+				let char_value: char = format!("{}", int_value).chars().nth(0).unwrap();
 				working_string[*string_index] = char_value;
 				working_string
 			});
