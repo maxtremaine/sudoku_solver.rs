@@ -53,6 +53,7 @@ impl Sudoku {
 		if sudoku_string.len() != 167 {
 			return Err("A .sudoku file must be 167 characters long.");
 		}
+		// TODO: Switch sudoku string to chars.
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
 			.enumerate()
