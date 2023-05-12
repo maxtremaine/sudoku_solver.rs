@@ -15,14 +15,16 @@ pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'stati
     // Add to working puzzles and collapse when no options are available.
     let output: Vec<Sudoku> = (1..=max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| {
-            let new_working_branches = working_branches.iter().fold(Vec::new(), |mut new_branches, current_branch| -> Vec<Sudoku> {
-                let blank_cells = current_branch.get_blank_cells();
-                let lowest_cell = &blank_cells[0];
-                lowest_cell.possible_values.iter().for_each(|possible_value| {
-                    new_branches.push(current_branch.change_cell(lowest_cell.index, *possible_value));
+            let new_working_branches = working_branches.iter()
+                .fold(Vec::new(), |mut new_branches, current_branch| -> Vec<Sudoku> {
+                    let blank_cells = current_branch.get_blank_cells();
+                    let lowest_cell = &blank_cells[0];
+                    lowest_cell.possible_values.iter().for_each(|possible_value| {
+                        let new_branch = current_branch.change_cell(lowest_cell.index, *possible_value);
+                        new_branches.push(new_branch);
+                    });
+                    new_branches
                 });
-                new_branches
-            });
             if verbose {
                 println!("Completed run {} with {} branches.", run_count, new_working_branches.len());
             }
