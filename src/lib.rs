@@ -6,7 +6,7 @@ use sudoku::Sudoku;
 
 pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'static str> {
     if verbose {
-        println!("\n")
+        println!("\n");
     }
 
     let start_puzzle = Sudoku::from(input_sudoku_file);
