@@ -49,6 +49,7 @@ pub struct Sudoku {
 
 impl Sudoku {
 	// Turns a .sudoku file into a Sudoku puzzle.
+	// TODO: Add a string length check for error handling.
 	pub fn from(sudoku_string: String) -> Result<Self, &'static str> {
 		let sudoku_string = sudoku_string.as_bytes();
 		let numbers: [u8; 81] = FILE_TO_STRING_INDEXES.iter()
@@ -79,6 +80,7 @@ impl Sudoku {
 	}
 
 	// Using a simple /81 index, what cells have to include 1-9 to satisfy the rules of Sudoku?
+	// TODO: Break out get_related_cell_indexes for TDD.
 	fn get_related_cell_values(&self, index: usize) -> Vec<u8> {
 		// Get the groups associated with "index"
 		let related_groups: Vec<[usize; 9]> = GROUPS.iter()
