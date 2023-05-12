@@ -154,6 +154,29 @@ impl Sudoku {
 		})
 	}
 
+	pub fn get_valid_solutions(self, verbose: bool) -> Vec<Self> {
+		let max_run_index = self.get_blank_cells().len();
+    
+		// Add to working puzzles and collapse when no options are available.
+		(1..=max_run_index)
+			.fold(Vec::from([self]), |working_branches, run_count| {
+				let new_working_branches = working_branches.iter()
+					.fold(Vec::new(), |mut new_branches, current_branch| -> Vec<Sudoku> {
+						let blank_cells = current_branch.get_blank_cells();
+						let lowest_cell = &blank_cells[0];
+						lowest_cell.possible_values.iter().for_each(|possible_value| {
+							let new_branch = current_branch.change_cell(lowest_cell.index, *possible_value);
+							new_branches.push(new_branch);
+						});
+						new_branches
+					});
+				if verbose {
+					println!("Completed run {} with {} branches.", run_count, new_working_branches.len());
+				}
+				new_working_branches
+			})
+	}
+
 	pub fn to_string(&self) -> String {
 		let mut working_string: [char; 167] = [
 			' ', ' ', 'a', 'b', 'c', ' ', 'd', 'e', 'f', ' ', 'g', 'h', 'i', '\n',
