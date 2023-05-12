@@ -43,7 +43,3 @@ cargo run
 The completed puzzle will be printed to the terminal and added to io/finish.sudoku after all of the cells are filled.
 
 You can also use the _solve_ function from the sudoku_solver_rs library if you want to solve puzzles from .sudoku files in your own program.
-
-## To Do
-
-- [ ] Use question mark operator for error propagation in lib.rs
