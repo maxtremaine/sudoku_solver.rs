@@ -9,18 +9,9 @@ pub fn solve(input_sudoku_file: String, verbose: bool) -> Result<String, &'stati
     if verbose {
         println!("\n");
     }
-
-    let start_puzzle = Sudoku::from(input_sudoku_file);
-
-    // TODO: Move error propagation to question mark operator.
-    if start_puzzle.is_err() {
-        return Err(start_puzzle.err().unwrap());
-    }
-
-    let start_puzzle = start_puzzle.ok().unwrap();
-    
+    let start_puzzle = Sudoku::from(input_sudoku_file)?;
     let max_run_index = start_puzzle.get_blank_cells().len();
-
+    
     // Add to working puzzles and collapse when no options are available.
     let output: Vec<Sudoku> = (1..=max_run_index)
         .fold(Vec::from([start_puzzle]), |working_branches, run_count| {
