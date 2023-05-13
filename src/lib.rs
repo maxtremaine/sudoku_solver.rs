@@ -4,6 +4,7 @@ mod pure_functions;
 
 use sudoku::Sudoku;
 
+// TODO: Add input enum and generic solve function.
 pub fn solve_file(input_sudoku_file: String, verbose: bool) -> Result<String, &'static str> {
     if verbose {
         println!("\n");
