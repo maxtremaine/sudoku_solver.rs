@@ -16,6 +16,6 @@ fn main() {
     write("./io/finish.sudoku", output_sudoku_file)
         .expect("Unable to write file.");
 
-    let elapsed = t0.elapsed();
-    println!("Elapsed: {:.2?}", elapsed);
+    let elapsed_string = format!("{:.2?}", t0.elapsed());
+    println!("Elapsed: {elapsed_string}");
 }
